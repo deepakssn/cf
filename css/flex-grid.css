@@ -1,0 +1,25 @@
+
+
+body {
+    margin: 0;
+    font-size: 20px;
+}
+.flex-container {
+    height: 100%;
+    padding: 0;
+    padding-top: 60px;
+    margin: 0;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    background: #f1f1f1;
+}
+.vc {
+  align-content: space-between;
+  
+}
