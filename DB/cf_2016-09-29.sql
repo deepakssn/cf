@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: cf
-# Generation Time: 2016-09-29 05:31:56 +0000
+# Generation Time: 2016-09-29 08:04:45 +0000
 # ************************************************************
 
 
@@ -27,11 +27,15 @@ DROP TABLE IF EXISTS `AUTH`;
 
 CREATE TABLE `AUTH` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `EMAIL` varchar(11) DEFAULT NULL,
-  `OTP` tinyint(6) DEFAULT NULL,
-  `ATTEMPTS` tinyint(1) DEFAULT NULL,
+  `EMAIL` varchar(11) NOT NULL DEFAULT '',
+  `OTP` tinyint(6) NOT NULL,
+  `ATTEMPTS` tinyint(2) DEFAULT NULL,
   `IP` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `ACTIVE` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `idx_otp` (`OTP`),
+  KEY `idx_email` (`EMAIL`),
+  KEY `idx_active` (`ACTIVE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -46,7 +50,8 @@ CREATE TABLE `USER` (
   `EMAIL` varchar(128) DEFAULT NULL,
   `COUNTRYCODE` tinyint(4) unsigned DEFAULT NULL,
   `PHONE` int(16) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_email` (`EMAIL`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
