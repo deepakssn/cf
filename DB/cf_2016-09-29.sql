@@ -1,4 +1,4 @@
-﻿# ************************************************************
+# ************************************************************
 # Sequel Pro SQL dump
 # Version 4541
 #
@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.7.15)
 # Database: cf
-# Generation Time: 2016-09-29 08:04:45 +0000
+# Generation Time: 2016-09-29 11:17:22 +0000
 # ************************************************************
 
 
@@ -27,9 +27,9 @@ DROP TABLE IF EXISTS `AUTH`;
 
 CREATE TABLE `AUTH` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `EMAIL` varchar(11) NOT NULL DEFAULT '',
-  `OTP` tinyint(6) NOT NULL,
-  `ATTEMPTS` tinyint(2) DEFAULT NULL,
+  `EMAIL` varchar(128) NOT NULL DEFAULT '',
+  `OTP` int(6) unsigned NOT NULL,
+  `ATTEMPTS` tinyint(1) DEFAULT NULL,
   `IP` varchar(64) DEFAULT NULL,
   `ACTIVE` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -49,7 +49,7 @@ CREATE TABLE `USER` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `EMAIL` varchar(128) DEFAULT NULL,
   `COUNTRYCODE` tinyint(4) unsigned DEFAULT NULL,
-  `PHONE` int(16) unsigned DEFAULT NULL,
+  `PHONE` bigint(16) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_email` (`EMAIL`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
