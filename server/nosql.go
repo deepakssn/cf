@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -9,16 +10,21 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// To connect using the mongo shell:
+// mongo ds021326.mlab.com:21326/deepakssnmongodb -u <dbuser> -p <dbpassword>
+// To connect using a driver via the standard MongoDB URI (what's this?):
+//   mongodb://<dbuser>:<dbpassword>@ds021326.mlab.com:21326/deepakssnmongodb
+
 const (
 	// MongoDBHosts server name
-	MongoDBHosts = "localhost:27017"
+	MongoDBHosts = "ds021326.mlab.com:21326"
 	//AuthDatabase sd
-	AuthDatabase = "devtest"
+	AuthDatabase = "deepakssnmongodb"
 	//AuthUserName sdf
-	AuthUserName = "deepak"
+	AuthUserName = "dev"
 	// AuthPassword sdf
 	AuthPassword = "deepu"
-	// TestDatabase kjdf
+	// TestDatabase Not used
 	TestDatabase = "devtest"
 )
 
@@ -47,8 +53,51 @@ type (
 	}
 )
 
-// main is the entry point for the application.
+// Person is a struct
+type Person struct {
+	Name  string
+	Phone string
+}
+
 func nosql() {
+
+	// We need this object to establish a session to our MongoDB.
+	mongoDBDialInfo := &mgo.DialInfo{
+		Addrs:    []string{MongoDBHosts},
+		Timeout:  60 * time.Second,
+		Database: AuthDatabase,
+		Username: AuthUserName,
+		Password: AuthPassword,
+	}
+
+	session, err := mgo.DialWithInfo(mongoDBDialInfo)
+	if err != nil {
+		log.Fatalf("CreateSession: %s\n", err)
+	}
+	defer session.Close()
+
+	// Optional. Switch the session to a monotonic behavior.
+	session.SetMode(mgo.Monotonic, true)
+
+	c := session.DB(AuthDatabase).C("people")
+	err = c.Insert(&Person{"Deepak", "R"},
+		&Person{"Do$$", "J"},
+		&Person{"Sanjay", "K"})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	result := Person{}
+	err = c.Find(bson.M{"name": "Do$$"}).One(&result)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println("Phone:", result.Phone)
+}
+
+// main is the entry point for the application.
+func nosqlConcurrent() {
 	// We need this object to establish a session to our MongoDB.
 	mongoDBDialInfo := &mgo.DialInfo{
 		Addrs:    []string{MongoDBHosts},
