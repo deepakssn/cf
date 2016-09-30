@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.7.15)
 # Database: devtest
-# Generation Time: 2016-09-30 09:36:23 +0000
+# Generation Time: 2016-09-30 11:46:12 +0000
 # ************************************************************
 
 
@@ -38,16 +38,6 @@ CREATE TABLE `AUTH` (
   KEY `idx_active` (`ACTIVE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `AUTH` WRITE;
-/*!40000 ALTER TABLE `AUTH` DISABLE KEYS */;
-
-INSERT INTO `AUTH` (`id`, `EMAIL`, `OTP`, `ATTEMPTS`, `IP`, `ACTIVE`)
-VALUES
-	(1,'d@d.d',1023,NULL,NULL,127),
-	(2,'d@d.d',1023,NULL,NULL,0);
-
-/*!40000 ALTER TABLE `AUTH` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table DOMAIN
@@ -65,17 +55,6 @@ CREATE TABLE `DOMAIN` (
   KEY `idx_allow` (`ALLOW`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `DOMAIN` WRITE;
-/*!40000 ALTER TABLE `DOMAIN` DISABLE KEYS */;
-
-INSERT INTO `DOMAIN` (`id`, `DOMAIN`, `ALLOW`)
-VALUES
-	(1,'infosys.com',1),
-	(2,'gmail.com',0),
-	(3,'hotmail.com',0);
-
-/*!40000 ALTER TABLE `DOMAIN` ENABLE KEYS */;
-UNLOCK TABLES;
 
 
 # Dump of table USER
@@ -86,6 +65,8 @@ DROP TABLE IF EXISTS `USER`;
 CREATE TABLE `USER` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `EMAIL` varchar(128) DEFAULT NULL,
+  `FIRSTNAME` varchar(64) DEFAULT NULL,
+  `LASTNAME` varchar(64) DEFAULT NULL,
   `COUNTRYCODE` tinyint(4) unsigned DEFAULT NULL,
   `PHONE` bigint(16) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
