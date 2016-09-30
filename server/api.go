@@ -11,8 +11,8 @@ import (
 
 func main() {
 
-	dbconnect()
-	nosql()
+	//dbconnect()
+	//nosql()
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/domains", GetDomain)

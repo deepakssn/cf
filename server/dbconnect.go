@@ -31,16 +31,15 @@ func dbconnect() {
 	defer stmtOut.Close()
 
 	// Insert square numbers for 0-24 in the database
-	_, err = stmtIns.Exec("d@d.d", 1023, 127) // Insert tuples (i, i^2)
+	_, err = stmtIns.Exec("d@d.d", 1023, 0) // Insert tuples (i, i^2)
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
 	//
-	var squareNum int                                   // we "scan" the result in here
-	err = stmtOut.QueryRow("d@d.d", 0).Scan(&squareNum) // WHERE number = 13
+	var id int // we "scan" the result in here
+	err = stmtOut.QueryRow("d@d.d", 0).Scan(&id)
 	if err != nil {
 		panic(err.Error()) // proper error handling instead of panic in your app
 	}
-	fmt.Printf("DB ID: %d", squareNum)
-
+	fmt.Printf("DB ID: %d", id)
 }
