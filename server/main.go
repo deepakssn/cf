@@ -16,7 +16,7 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/domains", GetDomain)
-	router.HandleFunc("/email", ValidateEmail)
+	router.HandleFunc("/email", ValidateUser)
 	log.Fatal(http.ListenAndServe(":8081", router))
 }
 

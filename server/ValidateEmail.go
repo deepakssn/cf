@@ -5,21 +5,22 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// ValidateEmail will check if the domain received in the email is valid and generate OTP
-func ValidateEmail(w http.ResponseWriter, r *http.Request) {
+// ValidateUser will check if the domain received in the email is valid and generate OTP
+func ValidateUser(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	var email = r.Form["email"][0]
 
 	if validateEmail(email) {
 		var emailSplit = strings.Split(email, "@")
-		if CheckAllowedDomain(emailSplit[1]) == 1 {
+		if checkAllowedDomain(emailSplit[1]) == 1 {
 			fmt.Println("Send OTP Called")
-			SendOTP(" 1 0 4 3", "deepakssn.aws@gmail.com")
+			sendOTP(strconv.Itoa(random(1000, 9999)), "deepakssn.aws@gmail.com")
 		}
 	}
 }
@@ -40,7 +41,7 @@ func validateEmail(email string) bool {
 | 2     | NOT CONFIGURED |
 +-------+----------------+
 */
-func CheckAllowedDomain(d string) int {
+func checkAllowedDomain(d string) int {
 	db, err := sql.Open("mysql", "sql:deepu@/devtest")
 	if err != nil {
 		panic(err.Error())

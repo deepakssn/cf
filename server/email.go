@@ -1,18 +1,19 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/smtp"
 )
 
 // SendOTP will send an OTP
-func SendOTP(OTP string, to string) {
+func sendOTP(OTP string, to string) {
 	from := "deepakssn.aws@gmail.com"
-	pass := "******"
+	pass := "AWSgeek1$"
 
 	msg := "From: " + from + "\n" +
 		"To: " + to + "\n" +
-		"Subject: OTP using GO: " + OTP + "\n\n" + "Mike, Please acknowledge the email in slack/whatsapp :)"
+		"Subject: OTP using GO: " + OTP + "\n\n" + OTP
 
 	err := smtp.SendMail("smtp.gmail.com:587",
 		smtp.PlainAuth("", from, pass, "smtp.gmail.com"),
@@ -24,4 +25,6 @@ func SendOTP(OTP string, to string) {
 	}
 
 	log.Print("Email Sent!")
+	fmt.Println("OTP : ", OTP)
+
 }
