@@ -17,7 +17,10 @@ func ValidateEmail(w http.ResponseWriter, r *http.Request) {
 
 	if validateEmail(email) {
 		var emailSplit = strings.Split(email, "@")
-		fmt.Println(CheckAllowedDomain(emailSplit[1]))
+		if CheckAllowedDomain(emailSplit[1]) == 1 {
+			fmt.Println("Send OTP Called")
+			SendOTP(" 1 0 4 3", "deepakssn.aws@gmail.com")
+		}
 	}
 }
 func validateEmail(email string) bool {
