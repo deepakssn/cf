@@ -16,8 +16,8 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/domains", GetDomain)
-
-	log.Fatal(http.ListenAndServe(":8080", router))
+	router.HandleFunc("/email", ValidateEmail)
+	log.Fatal(http.ListenAndServe(":8081", router))
 }
 
 // Index is a standard index page
@@ -27,8 +27,15 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 // GetDomain will send the list of allowed domains and blocked domains
 func GetDomain(w http.ResponseWriter, r *http.Request) {
-	// son := []byte(`{ "allowedDomains": ["infosys.com","skidata.com","ansrsource.com"],"blockedDomains": ["test.com","quikr.com", "olx.in"]}`)
 	w.Header().Set("Content-Type", "application/json")
+	// For Testing Purpse ONLY
+	if origin := r.Header.Get("Origin"); origin != "" {
+		w.Header().Set("Access-Control-Allow-Origin", origin)
+	}
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token")
+	w.Header().Set("Access-Control-Allow-Credentials", "true")
+
 	response, err := GetDomainList()
 	if err != nil {
 		panic(err)
