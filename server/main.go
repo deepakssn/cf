@@ -9,10 +9,13 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func main() {
+// jsonresponse is the standard response structure used to send JSON response
+type jsonresponse struct {
+	status  string
+	message string
+}
 
-	//dbconnect()
-	//nosql()
+func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
 	router.HandleFunc("/domains", GetDomain)
