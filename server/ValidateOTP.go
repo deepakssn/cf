@@ -64,7 +64,5 @@ func getOTPFromDB(email string) (int, string) {
 		}
 		panic(err)
 	}
-	fmt.Println("Printing otp and expiry")
-	fmt.Println(dbOTP, dbExpiry)
 	return dbOTP, dbExpiry
 }
