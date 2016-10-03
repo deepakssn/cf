@@ -1,25 +1,23 @@
 package main
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // GetDomain will send the list of allowed domains and blocked domains
 func GetDomain(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	// For Testing Purpse ONLY
-	if origin := r.Header.Get("Origin"); origin != "" {
-		w.Header().Set("Access-Control-Allow-Origin", origin)
-	}
-	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
-	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token")
-	w.Header().Set("Access-Control-Allow-Credentials", "true")
-
+	w.Header().Set("Server", "Blip Gopher!")
+	w.WriteHeader(200)
 	response, err := GetDomainList()
 	if err != nil {
-		panic(err)
+		http.Error(w, "Unable to process data at this time"+err.Error(), http.StatusInternalServerError)
 	}
 	fmt.Fprintf(w, string(response))
 }
@@ -30,8 +28,37 @@ func GetDomainList() ([]byte, error) {
 		AllowedDomains []string
 		BlockedDomains []string
 	}
-	var AllowedDomainList = []string{"infosys.com", "skidata.com"}
-	var BlockedDomainList = []string{"test.com", "gmail.com"}
-	var myList = domains{AllowedDomains: AllowedDomainList, BlockedDomains: BlockedDomainList}
-	return (json.MarshalIndent(myList, "", " "))
+
+	var dbDomainList domains
+	db, err := sql.Open("mysql", "sql:deepu@/devtest")
+	if err != nil {
+		log.Println(err)
+	}
+	defer db.Close()
+	db.Ping()
+	var (
+		domain string
+		allow  int
+	)
+	rows, err := db.Query("SELECT DOMAIN, ALLOW FROM DOMAIN")
+	if err != nil {
+		log.Println(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		err = rows.Scan(&domain, &allow)
+		if err != nil {
+			log.Println(err)
+		}
+		if allow == 1 {
+			dbDomainList.AllowedDomains = append(dbDomainList.AllowedDomains, domain)
+		} else {
+			dbDomainList.BlockedDomains = append(dbDomainList.BlockedDomains, domain)
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		log.Println(err)
+	}
+	return (json.MarshalIndent(dbDomainList, "", " "))
 }

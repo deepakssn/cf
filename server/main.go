@@ -9,9 +9,15 @@ import (
 )
 
 // jsonresponse is the standard response structure used to send JSON response
-type jsonresponse struct {
-	status  string
-	message string
+type jsonSuccess struct {
+	successCategory string
+	successMessage  string
+}
+
+type jsonError struct {
+	errorCategory string
+	errorCode     string
+	errorMessage  string
 }
 
 func main() {
