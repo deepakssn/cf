@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.7.15)
 # Database: devtest
-# Generation Time: 2016-10-03 04:31:42 +0000
+# Generation Time: 2016-10-03 09:24:48 +0000
 # ************************************************************
 
 
@@ -39,6 +39,15 @@ CREATE TABLE `AUTH` (
   KEY `idx_active` (`ACTIVE`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+LOCK TABLES `AUTH` WRITE;
+/*!40000 ALTER TABLE `AUTH` DISABLE KEYS */;
+
+INSERT INTO `AUTH` (`id`, `EMAIL`, `OTP`, `ATTEMPTS`, `ACTIVE`, `EXPIRY`)
+VALUES
+	(1,'deepak@skidata.com',2272,0,1,'2016-10-04 05:55:26');
+
+/*!40000 ALTER TABLE `AUTH` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table DOMAIN
@@ -63,7 +72,7 @@ INSERT INTO `DOMAIN` (`id`, `DOMAIN`, `ALLOW`)
 VALUES
 	(1,'infosys.com',1),
 	(2,'skidata.com',1),
-	(3,'ansrsource',1),
+	(3,'ansrsource.com',1),
 	(4,'hotmail.com',0),
 	(5,'gmail.com',0),
 	(6,'yahoo.com',0);
