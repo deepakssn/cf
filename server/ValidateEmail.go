@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"regexp"
-	"strconv"
 	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -15,14 +14,14 @@ import (
 func ValidateUser(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
-	var email = r.Form["email"][0]
+	var email = strings.ToLower(r.Form["email"][0])
 	if validateEmail(email) {
 		var emailSplit = strings.Split(email, "@")
 		if checkAllowedDomain(emailSplit[1]) == 1 {
 			fmt.Println("Send OTP Called")
-			var OTP = random(1000, 9999)
-			go sendOTP(strconv.Itoa(OTP), "deepakssn.aws@gmail.com")
-			if insertAuthToDB(email, OTP) {
+			otp := random(1000, 9999)
+			go sendOTP(otp, "deepakssn.aws@gmail.com")
+			if insertAuthToDB(email, otp) {
 				fmt.Println("success")
 			}
 		}
