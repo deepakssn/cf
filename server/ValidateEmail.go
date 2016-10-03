@@ -17,16 +17,23 @@ func ValidateUser(w http.ResponseWriter, r *http.Request) {
 	var email = strings.ToLower(r.Form["email"][0])
 	if validateEmail(email) {
 		var emailSplit = strings.Split(email, "@")
-		if checkAllowedDomain(emailSplit[1]) == 1 {
-			fmt.Println("Send OTP Called")
+		domainFlag := checkAllowedDomain(emailSplit[1])
+		if domainFlag == 1 {
 			otp := random(1000, 9999)
-			go sendOTP(otp, "deepakssn.aws@gmail.com")
 			if insertAuthToDB(email, otp) {
-				fmt.Println("success")
+				if sendOTP(otp, "deepakssn.aws@gmail.com") {
+					response, err := GenerateSuccessResponse("AUTH", "OTP Emailed Successfully")
+					if err != nil {
+						panic(err)
+					}
+					fmt.Fprintf(w, string(response))
+				}
 			}
+		} else if domainFlag == 2 {
+
 		}
 	} else {
-		response, err := (json.MarshalIndent(jsonError{ErrCat: "EMAAIL", ErrCode: "VE001", ErrMsg: "Invalid Email Address"}, "", " "))
+		response, err := (json.MarshalIndent(jsonError{Result: "FAIL", ErrorCategory: "EMAAIL", ErrorCode: "VE001", ErrorMessage: "Invalid Email Address"}, "", " "))
 		if err != nil {
 			panic(err)
 		}

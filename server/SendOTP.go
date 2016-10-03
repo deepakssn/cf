@@ -1,14 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/smtp"
 	"strconv"
 )
 
 // SendOTP will send an OTP
-func sendOTP(otp int, to string) {
+func sendOTP(otp int, to string) bool {
 	from := "deepakssn.aws@gmail.com"
 	pass := "AWSgeek1$"
 
@@ -22,10 +21,11 @@ func sendOTP(otp int, to string) {
 
 	if err != nil {
 		log.Printf("smtp error: %s", err)
-		return
+		return false
 	}
 
 	log.Print("Email Sent!")
-	fmt.Println("OTP : ", otp)
+	log.Print("OTP : ", otp)
+	return true
 
 }

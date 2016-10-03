@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,14 +11,16 @@ import (
 
 // jsonresponse is the standard response structure used to send JSON response
 type jsonSuccess struct {
-	SuccessCat string `json:"successCategory"`
-	SuccessMsg string `json:"successMessage"`
+	Result          string `json:"result"`
+	SuccessCategory string `json:"successCategory"`
+	SuccessMessage  string `json:"successMessage"`
 }
 
 type jsonError struct {
-	ErrCat  string `json:"errorCategory"`
-	ErrCode string `json:"errorCode"`
-	ErrMsg  string `json:"errorMessage"`
+	ErrorCategory string `json:"errorCategory"`
+	ErrorCode     string `json:"errorCode"`
+	ErrorMessage  string `json:"errorMessage"`
+	Result        string `json:"result"`
 }
 
 func main() {
@@ -32,4 +35,14 @@ func main() {
 // Index is a standard index page
 func Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Welcome!")
+}
+
+// GenerateFailureResponse generates the JSON response
+func GenerateFailureResponse(ErrCat string, ErrCode string, ErrMsg string) ([]byte, error) {
+	return (json.MarshalIndent(jsonError{Result: "fail", ErrorCategory: ErrCat, ErrorCode: ErrCode, ErrorMessage: ErrMsg}, "", " "))
+}
+
+// GenerateSuccessResponse generates the JSON response
+func GenerateSuccessResponse(SuccessCat string, SuccessMsg string) ([]byte, error) {
+	return (json.MarshalIndent(jsonSuccess{Result: "success", SuccessCategory: SuccessCat, SuccessMessage: SuccessMsg}, "", " "))
 }
