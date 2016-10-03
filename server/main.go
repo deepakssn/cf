@@ -10,14 +10,14 @@ import (
 
 // jsonresponse is the standard response structure used to send JSON response
 type jsonSuccess struct {
-	successCategory string
-	successMessage  string
+	SuccessCat string `json:"successCategory"`
+	SuccessMsg string `json:"successMessage"`
 }
 
 type jsonError struct {
-	errorCategory string
-	errorCode     string
-	errorMessage  string
+	ErrCat  string `json:"errorCategory"`
+	ErrCode string `json:"errorCode"`
+	ErrMsg  string `json:"errorMessage"`
 }
 
 func main() {

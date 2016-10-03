@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -12,7 +13,6 @@ import (
 
 // ValidateUser will check if the domain received in the email is valid and generate OTP
 func ValidateUser(w http.ResponseWriter, r *http.Request) {
-
 	r.ParseForm()
 	var email = strings.ToLower(r.Form["email"][0])
 	if validateEmail(email) {
@@ -25,6 +25,12 @@ func ValidateUser(w http.ResponseWriter, r *http.Request) {
 				fmt.Println("success")
 			}
 		}
+	} else {
+		response, err := (json.MarshalIndent(jsonError{ErrCat: "EMAAIL", ErrCode: "VE001", ErrMsg: "Invalid Email Address"}, "", " "))
+		if err != nil {
+			panic(err)
+		}
+		fmt.Fprintf(w, string(response))
 	}
 }
 func validateEmail(email string) bool {
