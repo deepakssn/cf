@@ -13,14 +13,18 @@ import (
 
 // ValidateUser will check if the domain received in the email is valid and generate OTP
 func ValidateUser(w http.ResponseWriter, r *http.Request) {
+
 	r.ParseForm()
 	var email = r.Form["email"][0]
-
 	if validateEmail(email) {
 		var emailSplit = strings.Split(email, "@")
 		if checkAllowedDomain(emailSplit[1]) == 1 {
 			fmt.Println("Send OTP Called")
-			sendOTP(strconv.Itoa(random(1000, 9999)), "deepakssn.aws@gmail.com")
+			var OTP = random(1000, 9999)
+			go sendOTP(strconv.Itoa(OTP), "deepakssn.aws@gmail.com")
+			if insertAuthToDB(email, OTP) {
+				fmt.Println("success")
+			}
 		}
 	}
 }
@@ -53,7 +57,6 @@ func checkAllowedDomain(d string) int {
 		panic(err.Error())
 	}
 	defer stmtOut.Close()
-
 	var count int
 	err = stmtOut.QueryRow(d, 1).Scan(&count)
 	if err != nil {
@@ -62,7 +65,6 @@ func checkAllowedDomain(d string) int {
 	if count > 0 {
 		return 1 // Allowed
 	}
-
 	err = stmtOut.QueryRow(d, 0).Scan(&count)
 	if err != nil {
 		panic(err)
@@ -70,7 +72,13 @@ func checkAllowedDomain(d string) int {
 	if count > 0 {
 		return 0 // blocked
 	}
-
 	return 2 // Default
+}
 
+// Get the IP Address of the http Request
+func getIP(r *http.Request) string {
+	fmt.Printf("r: %+v\n", r)
+	ip := r.Referer()
+	fmt.Println(ip)
+	return ip
 }
