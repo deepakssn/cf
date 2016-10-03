@@ -54,7 +54,7 @@ func insertAuthToDB(email string, otp int) bool {
 		defer stmtUpd.Close() // Close the statement when we leave main() / the program terminates
 		//Time + 24 Hours in UTC
 		otpExpiry := time.Now().UTC().Add(24 * time.Hour)
-		_, err = stmtUpd.Exec(email, otp, 0, 1, otpExpiry) // Insert tuples (i, i^2)
+		_, err = stmtUpd.Exec(otp, 0, 1, otpExpiry, email) // Insert tuples (i, i^2)
 		if err != nil {
 			panic(err.Error()) // proper error handling instead of panic in your app
 		}
