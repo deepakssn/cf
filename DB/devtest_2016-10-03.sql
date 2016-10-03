@@ -7,7 +7,7 @@
 #
 # Host: localhost (MySQL 5.7.15)
 # Database: devtest
-# Generation Time: 2016-10-03 03:41:23 +0000
+# Generation Time: 2016-10-03 04:31:42 +0000
 # ************************************************************
 
 
@@ -33,6 +33,7 @@ CREATE TABLE `AUTH` (
   `ACTIVE` tinyint(1) NOT NULL DEFAULT '0',
   `EXPIRY` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_email` (`EMAIL`),
   KEY `idx_otp` (`OTP`),
   KEY `idx_email` (`EMAIL`),
   KEY `idx_active` (`ACTIVE`)
@@ -84,6 +85,7 @@ CREATE TABLE `USER` (
   `COUNTRYCODE` tinyint(4) unsigned DEFAULT NULL,
   `PHONE` bigint(16) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_email` (`EMAIL`),
   KEY `idx_email` (`EMAIL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
