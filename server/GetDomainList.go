@@ -52,7 +52,7 @@ func GetDomainList() ([]byte, error) {
 		}
 		if allow == 1 {
 			dbDomainList.AllowedDomains = append(dbDomainList.AllowedDomains, domain)
-		} else {
+		} else if allow == 0 {
 			dbDomainList.BlockedDomains = append(dbDomainList.BlockedDomains, domain)
 		}
 	}

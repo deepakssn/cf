@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -22,10 +21,8 @@ func ValidateUser(w http.ResponseWriter, r *http.Request) {
 			otp := random(1000, 9999)
 			if insertAuthToDB(email, otp) {
 				if sendOTP(otp, "deepakssn.aws@gmail.com") {
-					response, err := GenerateSuccessResponse("AUTH", "OTP Emailed Successfully")
-					if err != nil {
-						panic(err)
-					}
+					response := GenerateSuccessResponse("AUTH", "OTP Emailed Successfully")
+
 					fmt.Fprintf(w, string(response))
 				}
 			}
@@ -33,10 +30,7 @@ func ValidateUser(w http.ResponseWriter, r *http.Request) {
 
 		}
 	} else {
-		response, err := (json.MarshalIndent(jsonError{Result: "FAIL", ErrorCategory: "EMAAIL", ErrorCode: "VE001", ErrorMessage: "Invalid Email Address"}, "", " "))
-		if err != nil {
-			panic(err)
-		}
+		response := GenerateFailureResponse("EMAIL", "VE001", "Invalid Email Address")
 		fmt.Fprintf(w, string(response))
 	}
 }

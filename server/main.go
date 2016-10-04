@@ -38,11 +38,19 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 // GenerateFailureResponse generates the JSON response
-func GenerateFailureResponse(ErrCat string, ErrCode string, ErrMsg string) ([]byte, error) {
-	return (json.MarshalIndent(jsonError{Result: "fail", ErrorCategory: ErrCat, ErrorCode: ErrCode, ErrorMessage: ErrMsg}, "", " "))
+func GenerateFailureResponse(ErrCat string, ErrCode string, ErrMsg string) []byte {
+	response, err := (json.MarshalIndent(jsonError{Result: "fail", ErrorCategory: ErrCat, ErrorCode: ErrCode, ErrorMessage: ErrMsg}, "", " "))
+	if err != nil {
+		panic(err)
+	}
+	return response
 }
 
 // GenerateSuccessResponse generates the JSON response
-func GenerateSuccessResponse(SuccessCat string, SuccessMsg string) ([]byte, error) {
-	return (json.MarshalIndent(jsonSuccess{Result: "success", SuccessCategory: SuccessCat, SuccessMessage: SuccessMsg}, "", " "))
+func GenerateSuccessResponse(SuccessCat string, SuccessMsg string) []byte {
+	response, err := (json.MarshalIndent(jsonSuccess{Result: "success", SuccessCategory: SuccessCat, SuccessMessage: SuccessMsg}, "", " "))
+	if err != nil {
+		panic(err)
+	}
+	return response
 }
