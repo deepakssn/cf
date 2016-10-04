@@ -8,8 +8,8 @@ import (
 
 // SendOTP will send an OTP
 func sendOTP(otp int, to string) bool {
-	from := "deepakssn.aws@gmail.com"
-	pass := "AWSgeek1$"
+	from := ""
+	pass := ""
 
 	msg := "From: " + from + "\n" +
 		"To: " + to + "\n" +
